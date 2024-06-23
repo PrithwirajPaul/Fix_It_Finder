@@ -99,8 +99,7 @@ session_start();
           if (!$conn) {
             die("Connection failed: " . mysqli_connect_error());
           }
-
-          // Escape special characters in a string for use in an SQL statement
+          
           $post_string_escaped = mysqli_real_escape_string($conn, $post_string);
           $title_string_escaped = mysqli_real_escape_string($conn, $title_string);
 
