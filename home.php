@@ -27,7 +27,7 @@ $current_user_type = $_SESSION['type'];
         <div class="d-flex justify-content-center">
           <div class="py-4">
             <!--<div ><img  src="https://i.ibb.co/L6ht5pP/people-3.jpg" alt="avatar"></div>-->
-            <div><img  src="https://i.ibb.co/L6ht5pP/people-3.jpg" height="150" width="150"></div>
+            <div><img  src="<?php echo $_SESSION['image'] ?>" height="150" width="150"></div>
             <div class="text-center mt-3">
               <h2 class="h5"><?php echo $current_user?></h2>
               <p class="small text-muted">@janedoe</p>

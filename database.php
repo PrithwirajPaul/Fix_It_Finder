@@ -60,9 +60,15 @@ $dbname = "social_database";
     }
 
     $sql = "CREATE TABLE IF NOT EXISTS info_table (
-        username VARCHAR(255) PRIMARY KEY,
+        userid int primary key auto_increment,
+        username VARCHAR(255),
         password_ TEXT,
-        type_ VARCHAR(255)
+        type_ VARCHAR(255),
+        email VARCHAR(255),
+        phone VARCHAR(255),
+        adrs VARCHAR(255),
+        zip VARCHAR(255),
+        img VARCHAR(255) default ('images/default_pp.jpg')
     )";
 
     if ($conn->query($sql) === TRUE) {
