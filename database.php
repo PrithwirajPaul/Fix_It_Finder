@@ -36,7 +36,8 @@ $dbname = "social_database";
         post_content TEXT,
         post_title VARCHAR(255),
         vote INT,
-        post_id INT PRIMARY KEY AUTO_INCREMENT
+        post_id INT PRIMARY KEY AUTO_INCREMENT,
+        isPublic varchar(255)
     )";
 
     if ($conn->query($sql) === TRUE) {

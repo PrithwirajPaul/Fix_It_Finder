@@ -1,6 +1,6 @@
 <?php
 session_start();
-$current_user = $_SESSION['USERNAME'];
+$current_user = $_SESSION['username'];
 $current_user_type = $_SESSION['type'];
 ?>
 
@@ -30,27 +30,27 @@ $current_user_type = $_SESSION['type'];
             <div><img  src="<?php echo $_SESSION['image'] ?>" height="150" width="150"></div>
             <div class="text-center mt-3">
               <h2 class="h5"><?php echo $current_user?></h2>
-              <p class="small text-muted">@janedoe</p>
+              <p class="small text-muted"> <?php echo $_SESSION['email'] ?> </p>
             </div>
           </div>
         </div>
         <div class="d-flex justify-content-center flex-wrap">
           <div class="text-center px-3 py-2">
-            <p class="small text-muted mb-0">Followers</p>
-            <p class="font-weight-bold mb-0">567K</p>
+            <p class="small text-muted mb-0">Reviews</p>
+            <p class="font-weight-bold mb-0">5 star</p>
           </div>
           <div class="text-center px-3 py-2">
-            <p class="small text-muted mb-0">Following</p>
-            <p class="font-weight-bold mb-0">567K</p>
+            <p class="small text-muted mb-0">Experience</p>
+            <p class="font-weight-bold mb-0">2+ years</p>
           </div>
           <div class="text-center px-3 py-2">
-            <p class="small text-muted mb-0">Posts</p>
-            <p class="font-weight-bold mb-0">67</p>
+            <p class="small text-muted mb-0">Serviced</p>
+            <p class="font-weight-bold mb-0">16</p>
           </div>
         </div>
         <p class="text-muted mb-0 py-4">Lorem ipsum dolor sit amet Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur.</p>
         <div class="text-center">
-          <button class="btn btn-link" type="button">View your profile
+          <a href="profile.php" class="btn btn-link" type="button">View your profile </a>
           </button>
         </div>
       </div>
@@ -92,8 +92,6 @@ $current_user_type = $_SESSION['type'];
           }
           
         </script>
-        <input onclick="uncheck1()" id="radiobtn1" name="radiobtn1" type="radio" value="prashant">prashant</input>
-        
         <?php
 $_SESSION['mypost'] = null;
 $_SESSION['mytitle'] = null;
@@ -141,11 +139,16 @@ if($post_string != null) {
         #code to get all the post_content+title+poster from db
         $sql = "SELECT * FROM post_manage";
         $result = mysqli_query($conn, $sql);
+        $img=array();
         $arr =array();
 
         if(mysqli_num_rows($result) > 0){ 
             while($row = mysqli_fetch_assoc($result)){
                 array_push ($arr , array($row['username'],$row['post_content'],$row['post_title'],$row['post_id'],$row['isPublic']));
+                $imgqr= mysqli_query($conn,"select img from info_table  where username='{$row['username']}'");
+                if($imgrow= mysqli_fetch_assoc(($imgqr))) {
+                  array_push($img,array($imgrow['img']));
+                }
             } 
         }
         mysqli_close( $conn );
@@ -204,7 +207,7 @@ if($post_string != null) {
             <div class="d-flex justify-content-between align-items-center">
               <div class="d-flex flex-row align-items-center">
                 
-                <div><img  src="https://i.ibb.co/L6ht5pP/people-3.jpg" width="70px" height="70px" alt="Avatar" style="border-radius: 50%;"></div>
+                <div><img  src="<?php echo $img[$i][0] ?>" width="70px" height="70px" alt="No image" style="border-radius: 50%;"></div>
                 <div>
                   <h2 class="h6 mb-0"> <?php print_r($arr[$i][0])?></h2>
                   <p class="small text-muted mb-0">15 min ago</p>
@@ -232,7 +235,7 @@ if($post_string != null) {
                   <i class="mr-1" data-feather="heart"></i>432
               </button>
               
-                <?php if ($current_user_type == 'Y' && $arr[$i][0]!=$current_user){?>
+                <?php if ($current_user_type == 'service-provider' && $arr[$i][0]!=$current_user){?>
                   <?php 
                       $button_text="ACCEPT";
                       $col = 'green';
