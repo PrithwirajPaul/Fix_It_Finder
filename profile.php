@@ -485,7 +485,7 @@ if (isset($_POST['service_taken'])) {
                                         </button>
                                     <?php } else { ?>
                                         <button class="btn success" id="btn"><a class="dropdown-item"
-                                                href="<?php echo $destination . "&cuser=" . $current_user ?>"
+                                                href="<?php echo $destination . "&user=" . $current_user ?>"
                                                 title="<?php echo $title ?>"
                                                 style="color: <?php echo $col ?>; text-decoration: none;"><?php echo $button_text ?></a></button>
                                         </button>
