@@ -1,0 +1,251 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>FixItFinder - Your Home Maintenance Solution</title>
+    <style>
+        body, h1, h2, h3, p, ul, li, a {
+            margin: 0;
+            padding: 0;
+            text-decoration: none;
+            list-style: none;
+        }
+
+        body {
+            font-family: Arial, sans-serif;
+            line-height: 1.6;
+            background-color: #f9f9ff;
+            color: #6a1b9a;
+        }
+
+        .container {
+            width: 80%;
+            margin: auto;
+            overflow: hidden;
+        }
+
+        header {
+            background: #b488cf; /* Light purple */
+            color: #fff;
+            padding: 1rem 0;
+            margin-left: 0px;
+            display: flex;
+        }
+
+        header h1 {
+            margin: 0;
+        }
+
+        header nav ul {
+            display: flex;
+            align-items: flex-end;
+        }
+
+        header nav ul li {
+            margin-left: 20px;
+        }
+
+        header nav ul li a {
+            color: #fff;
+            text-transform: uppercase;
+        }
+
+        header.container{
+            width: 100vw;
+            display: flex;
+            flex-direction: row;
+        }
+        .left{
+            display: flex;
+            justify-content: flex-start;
+        }
+        .right{
+            display: flex;
+            justify-content: flex-end;
+        }
+
+
+
+        .hero {
+            background: url('hero-image.jpg') no-repeat center center/cover;
+            color: #fff;
+            padding: 100px 0;
+            text-align: center;
+        }
+
+            .btn {
+            display: inline-block;
+            padding: 10px 20px;
+            background: #ab47bc; /* Light purple */
+            color: #fff;
+            border-radius: 5px;
+            transition: background 0.3s ease;
+            margin-top: 18px;
+        }
+
+        .hero .search-form .btn:hover {
+            background: #6a1b9a; /* Darker purple */
+        }
+
+        section {
+            padding: 50px 0;
+        }
+
+        .about, .services, .contact, .how-it-works, .testimonials {
+            text-align: center;
+        }
+
+        .service-list {
+            display: flex;
+            justify-content: space-around;
+        }
+
+        .service-item, .step, .testimonial-item {
+            background: #fff;
+            padding: 20px;
+            border-radius: 5px;
+            width: 30%;
+            margin: 10px;
+            box-shadow: 0 0 10px rgba(0,0,0,0.1);
+        }
+
+        .service-item img, .step img {
+            width: 100%;
+            border-radius: 5px 5px 0 0;
+        }
+
+        .service-item h3, .step h3 {
+            margin-bottom: 10px;
+        }
+
+        footer {
+            background: #6a1b9a; /* Light purple */
+            color: #fff;
+            text-align: center;
+            padding: 10px 0;
+        }
+
+        footer nav ul {
+            display: flex;
+            justify-content: center;
+        }
+
+        footer nav ul li {
+            margin-left: 20px;
+        }
+
+        footer nav ul li a {
+            color: #fff;
+        }
+
+    </style>
+</head>
+<body>
+    <header>
+        <div class="container">
+            <div class="left"><h1>FixItFinder</h1></div>
+            <div class="right">
+                <nav>
+                    <ul>
+                        <li><a href="#services">Services</a></li>
+                        <li><a href="#how-it-works">How It Works</a></li>
+                        <li><a href="#contact">Contact</a></li>
+                        <li><a href="login.html">Login</a></li>
+                    </ul>
+                </nav>
+            </div>
+        </div>
+    </header>
+
+    <section class="hero">
+        <div class="container" style="color:#6a1b9a">
+            <h2>Your Go-To Platform for Home Maintenance and Repair Services</h2>
+            <p>Connecting you with skilled professionals to tackle all your household needs.</p>
+                <button type="submit" class="btn" onclick="window.location.href='login.html'">Find Professionals</button>
+        </div>
+    </section>
+
+    <section id="services" class="services">
+        <div class="container">
+            <h2>Our Services</h2>
+            <div class="service-list">
+                <div class="service-item">
+                    <img src="images/elec.jpg" alt="Electrical Services">
+                    <h3>Electrical</h3>
+                    <p>From fixing a light bulb to installing new electrical systems, our electricians are here to help.</p>
+                </div>
+                <div class="service-item">
+                    <img src="images/plumbing.jpg" alt="Plumbing Services">
+                    <h3>Plumbing</h3>
+                    <p>Got a leaky faucet or a clogged drain? Our plumbing experts have got you covered.</p>
+                </div>
+                <div class="service-item">
+                    <img src="images/cleaning.jpg" alt="Cleaning Services">
+                    <h3>Cleaning</h3>
+                    <p>Our professional cleaning services will keep your home spotless and hygienic.</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section id="how-it-works" class="how-it-works">
+        <div class="container">
+            <h2>How It Works</h2>
+            <div class="steps" style="display: flex;flex-direction: row;">
+                <div class="step">
+                    <img src="images/search.jpg" alt="Search">
+                    <h3>1. Search</h3>
+                    <p>Find the service you need and enter your location.</p>
+                </div>
+                <div class="step">
+                    <img src="images/connect.jpg" alt="Connect">
+                    <h3>2. Connect</h3>
+                    <p>Get matched with skilled professionals in your area.</p>
+                </div>
+                <div class="step">
+                    <img src="images/hire.jpg" alt="Hire">
+                    <h3>3. Hire</h3>
+                    <p>Choose the best professional for the job and get it done.</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section id="testimonials" class="testimonials">
+        <div class="container">
+            <h2>Testimonials</h2>
+            <div class="testimonial-list" style="display: flex;flex-direction: row;">
+                <div class="testimonial-item">
+                    <p>"FixItFinder made it so easy to find a plumber to fix my sink. The service was quick and professional!"</p>
+                    <p>- Sarah K.</p>
+                </div>
+                <div class="testimonial-item">
+                    <p>"I needed an electrician urgently, and FixItFinder connected me with a great professional in no time."</p>
+                    <p>- John D.</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section id="contact" class="contact">
+        <div class="container">
+            <h2>Contact Us</h2>
+            <p>Have any questions or need assistance? Reach out to us, and we'll be happy to help!</p>
+            <a href="mailto:info@fixitfinder.com" class="btn">Email Us</a>
+        </div>
+    </section>
+
+    <footer>
+        <div class="container">
+            <p>&copy; 2024 FixItFinder. All rights reserved.</p>
+            <nav>
+                <ul>
+                    <li><a href="#">Privacy Policy</a></li>
+                    <li><a href="#">Terms of Service</a></li>
+                </ul>
+            </nav>
+        </div>
+    </footer>
+</body>
+</html>

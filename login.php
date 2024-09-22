@@ -1,52 +1,36 @@
 <?php
     session_start();
-?>
-
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Document</title>
-</head>
-<body>
-    <form action="login.php" method="post">
-        username:<br>
-        <input type ="text" name = "USERNAME"><br>
-        password:<br>
-        <input type ="text" name = "password"><br>
-        type:<br>
-        <input type ="text" name = "type"><br>
-        <input type = "submit" name ="login" value ="login">
-    </form>
-</body>
-</html>
-
-<?php
-    #session_start();
     if (isset($_POST['login'])){
-        if (!empty($_POST['USERNAME']) && !empty($_POST['password']) && !empty($_POST['type'])){
-            $_SESSION['USERNAME'] = $_POST['USERNAME'];
-            $_SESSION['password'] = $_POST['password'];
-            $_SESSION['type'] = $_POST['type'];
+        if (!empty($_POST['username']) && !empty($_POST['password']) && !empty($_POST['type'])){
+            $hashed_password = password_hash($_POST['password'], PASSWORD_DEFAULT);
+            echo $_POST['username'].' '. $_POST['password']. ' '. $_POST['type']. ' '. $hashed_password ;
             # taking a user type input, like 'professional' & 'averageguy'. Used Y and X to define. 
             include('database.php');
-            $sql = "SELECT username,password_,type_ FROM info_table";
+            $sql = "SELECT * FROM info_table where type_='{$_POST['type']}' && username='{$_POST['username']}'";
             $result = mysqli_query($conn, $sql);
             
 
             if(mysqli_num_rows($result) > 0){ 
-                while($row = mysqli_fetch_assoc($result)){
-                    if ($_SESSION['USERNAME'] == $row['username'] && $_SESSION['password'] == $row['password_']&& $_SESSION['type'] == $row['type_']){
-                        header('location: home.php');
-                    }
-                } 
+                $row = mysqli_fetch_assoc($result);
+                if(password_verify($_POST['password'],$row['password_'])){
+                    $_SESSION['username']=$row['username'];
+                    $_SESSION['type']=$row['type_'];
+                    $_SESSION['userid'] = $row['userid'];
+                    $_SESSION['email']= $row['email'];
+                    $_SESSION['phone']=$row['phone'];
+                    $_SESSION['address']= $row['adrs'];
+                    $_SESSION['zip']=$row['zip'];
+                    $_SESSION['image']=$row['img'];
+                    $_SESSION['bio']=$row['bio'];
+                    if($row['type_']=='service-provider') $_SESSION['exp']=$row['experience'];
+                    header('location: home.php');
+                }else{
+                    //show message 'invalid password with the username'
+                }
+            }else {
+                echo 'Connection lost';
+            mysqli_close( $conn ); 
             }
-            mysqli_close( $conn );
-            
-            
-            
-            
         }
         else{
             echo 'Missing username/password';

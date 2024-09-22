@@ -1,140 +1,186 @@
-<!-- This page finds and shows the list of 'professionals' who has accepted my post req. i can now decline or accept his service.-->
 <?php
-    include('database.php');
-    $current_user = $_GET['cuser'];
-    $sql= "SELECT post_status.username, post_manage.post_title, post_manage.post_id FROM
+session_start();
+include('database.php');
+$current_user = $_SESSION['username'];
+$sql = "SELECT post_status.userid as provider,post_manage.userid as customer, post_manage.post_title,status_ as postStatus, post_manage.post_id FROM
            post_status INNER JOIN post_manage
-           ON post_status.post_id = post_manage.post_id AND post_manage.username = '$current_user'";
-    $result = $conn->query($sql);
-    $accepted_list = array();
-    if(mysqli_num_rows($result) > 0){ 
-        while($row = mysqli_fetch_assoc($result)){
-            array_push($accepted_list,array($row['username'],$row['post_title'],$row['post_id']));
-        } 
-    }
-?>
+           ON post_status.post_id = post_manage.post_id where (post_manage.userid ='{$_SESSION['userid']}' or post_status.userid='{$_SESSION['userid']}') order by post_status.id desc";
+$result = $conn->query($sql);
+$accepted_list = array();
+if (mysqli_num_rows($result) > 0) {
+  while ($row = mysqli_fetch_assoc($result)) {
+    // echo '<pre>';
+    // print_r($row);
+    // echo '</pre>';
+    $provider_query = "SELECT username, img FROM info_table WHERE userid='{$row['provider']}'";
+    $user_result = mysqli_query($conn, $provider_query);
+    $provider = mysqli_fetch_assoc($user_result);
+    $customer_query = "SELECT username, img,adrs,phone FROM info_table WHERE userid='{$row['customer']}'";
+    $user_result = mysqli_query($conn, $customer_query);
+    $customer = mysqli_fetch_assoc($user_result);
+    // echo '<pre>';
+    // print_r($user);
+    // echo '</pre>';
 
+    array_push($accepted_list, array($provider['username'], $row['post_title'], $row['post_id'], $provider['img'], $row['provider'], $row['postStatus'], $row['customer'], $customer['username'], $customer['img'], $customer['adrs'], $customer['phone']));
+  }
+}
+// $sql = "SELECT * FROM connected_pairs";
+// $result = $conn->query($sql);
+// $connectedList=array();
+// if(mysqli_num_rows($result) > 0){ 
+//     while($row = mysqli_fetch_assoc($result)){
+//       array_push($connectedList,array($row['professional'],$row['average_joe']));
+//       }
+//     } 
+
+?>
 <!DOCTYPE html>
 <html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Document</title>
-    <style>
-        .flex-container {
-            display: flex;
-            justify-content: space-between;
-            align-items:end;
-            background-color: beige;
-            padding: 10px; /* Optional: Adds some padding inside the div */
-        }
 
-        .flex-container p {
-            margin: 0; /* Optional: Removes default margin from the paragraph */
-        }
-        .button-container {
-            display: flex;
-            gap: 10px; /* Optional: Adds some space between the buttons */
-        }
-    </style>
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Document</title>
+
+  <!-- Latest compiled and minified CSS -->
+  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.2.0/css/bootstrap.min.css">
+
+  <!-- Optional theme -->
+  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.2.0/css/bootstrap-theme.min.css">
+
+  <!-- Latest compiled and minified JavaScript -->
+  <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.2.0/js/bootstrap.min.js"></script>
 </head>
 
-<link href="//maxcdn.bootstrapcdn.com/bootstrap/4.1.1/css/bootstrap.min.css" rel="stylesheet" id="bootstrap-css">
-<script src="//maxcdn.bootstrapcdn.com/bootstrap/4.1.1/js/bootstrap.min.js"></script>
-<script src="//cdnjs.cloudflare.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
-<!------ Include the above in your HEAD tag ---------->
-
-<!------ HEAD ---------->
-<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Nunito+Sans:wght@400;800;900&display=swap">
-<link rel="stylesheet" href="https://unpkg.com/swiper/swiper-bundle.min.css">
-<link rel="stylesheet" href="styler.css">
 <body>
-    <!-- Load Font Awesome Icon Library -->
-<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+  <link href="http://getbootstrap.com/examples/jumbotron-narrow/jumbotron-narrow.css" rel="stylesheet">
+  <link rel="stylesheet" type="text/css" href="//netdna.bootstrapcdn.com/font-awesome/4.0.3/css/font-awesome.min.css">
 
 
 
-
-
-<h2 style="text-align:center; color:blueviolet">REQUEST LIST</h2>
-<div class="row">
-    <?php for ($i = 0; $i < count($accepted_list); $i++){ ?>
-        <div class="column" style="background-color:aquamarine;">
-        <h4 style="display: inline;"><?php echo $accepted_list[$i][0]; ?><span style="color: green;"> Accepted Your Request </span></h4>
-        <div class="flex-container" style="background-color: beige;">
-            <p>Title: <?php echo $accepted_list[$i][1]?></p>
-            <div class="button-container">
-            <button><a onClick="window.close();" style="text-decoration: none;" href="set-up-connection.php?op=<?php echo 1;?>&acceptor=<?php echo $accepted_list[$i][0]?>&postId=<?php echo $accepted_list[$i][2]?>&cuser=<?php echo $current_user?>">AC</a></button>
-            <button><a onClick="window.close();" style="text-decoration: none;" href="set-up-connection.php?op=<?php echo 0;?>&acceptor=<?php echo $accepted_list[$i][0]?>&postId=<?php echo $accepted_list[$i][2]?>&cuser=<?php echo $current_user?>">DC</a></button>
-        </div>
-            
-        </div>
-        <script>
-            var elements = document.getElementsByClassName("column");
-            var i;
-        for (i = 0; i < elements.length; i++) {
-            elements[i].style.width = "50%";
-        }
-        </script>
-        
-      </div>
-    <?php } ?>
+  <div class="container bootstrap snippets bootdey">
+    <div class="header">
+      <h3 class="text-muted prj-name">
+        <span class="fa fa-users fa-2x principal-title"></span>
+        Notification
+      </h3>
     </div>
-    <h2 style="text-align:center; color:cornflowerblue">ESTABLISHED CONNECTION</h2>
-    <?php
-        include('database.php');
-        $sql = "SELECT * FROM connected_pairs";
-        $result = $conn->query($sql);
-        $connectedList=array();
-        if(mysqli_num_rows($result) > 0){ 
-            while($row = mysqli_fetch_assoc($result)){
-              array_push($connectedList,array($row['professional'],$row['average_joe']));
-              }
-            } 
-        mysqli_close($conn);
-    ?>
 
 
-        
+    <div class="jumbotron list-content">
+      <ul class="list-group">
+        <?php for ($i = 0; $i < count($accepted_list); ++$i) { ?>
+          <li href="#" class="list-group-item text-left">
 
+            <?php if ($accepted_list[$i][7] == $current_user) {
+              #ur post got accepted
+              if ($accepted_list[$i][5] == 1) { ?>
+                <div style="display:flex; flex-direction:column; margin-left: 15px">
+                  <img class="img-thumbnail" height="70px" width="70px" src="<?php echo $accepted_list[$i][3] ?>">
+                  <p style="font-size:14px; margin-top:-25px"><a href="profile.php?user=<?php echo $accepted_list[$i][4] ?>">
+                      <h2><?php echo $accepted_list[$i][0] ?></h2>
+                    </a>
+                    is interested in doing the work that you posted.Here's <a
+                      href="show_post.php?pid=<?php echo $accepted_list[$i][2] ?>">the post</a></p>
+                  <p style="font-size:14px; color:brown"> Agree with it or not?</p>
+                </div>
+                <div style="margin-left:15px">
+                  <a class="btn btn-success btn-xs glyphicon glyphicon-ok" title="View"
+                    href="set-up-connection.php?op=<?php echo 1; ?>&acceptor=<?php echo $accepted_list[$i][4] ?>&postId=<?php echo $accepted_list[$i][2] ?>&cuser=<?php echo $_SESSION['userid'] ?>"></a>
+                  <a class="btn btn-danger  btn-xs glyphicon glyphicon-trash" title="Delete"
+                    href="set-up-connection.php?op=<?php echo 0; ?>&acceptor=<?php echo $accepted_list[$i][4] ?>&postId=<?php echo $accepted_list[$i][2] ?>&cuser=<?php echo $_SESSION['userid'] ?>"></a>
+                  <p class="text-muted" style="font-size:15px; margin-top:8px"> (N.B: Your contact details will be shared with the provider if you agree!)</p>
+                </div>
+                <!-- work finished and review  -->
 
-<?php for ($i = 0; $i < count($connectedList); $i++) { ?>
+              <?php } else if ($accepted_list[$i][5] == 4) { ?>
+                  <div style="display:flex; flex-direction:column; margin-left: 15px">
+                    <img class="img-thumbnail" height="70px" width="70px" src="<?php echo $accepted_list[$i][8] ?>">
+                    <p style="font-size:14px; margin-top:-25px"><a href="profile.php?user=<?php echo $accepted_list[$i][6] ?>">
+                        <h2><?php echo $accepted_list[$i][7] ?></h2>
+                      </a>
+                      is asking for your review for the service that he has provided to<a
+                        href="show_post.php?pid=<?php echo $accepted_list[$i][2] ?>">this work</a></p>
+                    <form id="postform" autocomplete="off" action='review.php?pID=<?php echo $accepted_list[$i][2] ?>' method='post' enctype="multipart/form-data">
+                      <textarea name="ratings" rows="1" cols="50" placeholder="Give rating out of 5" required></textarea>
+                      <br>
+                      <textarea name="comment" rows="5" cols="50" placeholder="Add comments about the service you got" required></textarea>
+                      <br>
+                      <div>
+                        <button name="Add" class="btn btn-success btn-xs glyphicon glyphicon-ok" title="Add"></button>
+                        <button name="Remove" class="btn btn-danger  btn-xs glyphicon glyphicon-trash" title="Remove"></button>
+                      </div>
+                    </form>
+                  </div>
+            </div>
+        <?php } ?>
 
-    <?php if($connectedList[$i][0]==$current_user  || $connectedList[$i][1]==$current_user){ ?>
-        <?php $guy = $connectedList[$i][0];?>
-        <?php if($connectedList[$i][0]==$current_user){ ?>
-            <?php $guy = $connectedList[$i][1];?>
-            <?php } ?>
-        
-        <div class="column" style="background-color:aquamarine;width: 50%; display: flex; align-items: center;">
-        <h4 style="display: inline;"><?php echo $guy; ?><span style="color: green;"> Accepted Your Request </span></h4>
-        <a href="delete-notify.php"><i class="mr-1" data-feather="x" style="margin-top: 10px; margin-left: 10px;" ></i></a>
-        <br>
-        </div>
-        <script>
-            var elements = document.getElementsByClassName("column");
-            var i;
-        for (i = 0; i < elements.length; i++) {
-            elements[i].style.width = "50%";
-        }
-        </script>        
-      </div>
+      <?php } else if ($accepted_list[$i][0] == $current_user) { ?>
+          <!-- your work request got accepted -->
+        <?php if ($accepted_list[$i][5] == 2) { ?>
+            <div style="display:flex; flex-direction:column; margin-left: 15px">
+              <img class="img-thumbnail" height="70px" width="70px" src="<?php echo $accepted_list[$i][8] ?>">
+              <p style="font-size:14px; margin-top:-25px"><a href="profile.php?user=<?php echo $accepted_list[$i][6] ?>">
+                  <h2><?php echo $accepted_list[$i][7] ?></h2>
+                </a>
+                has accepted your work request that you applied to.Here's <a
+                  href="show_post.php?pid=<?php echo $accepted_list[$i][2] ?>">the post</a></p>
+              <p style="font-size:14px; color:brown"> Details of the customer :
+              <ol>
+                <li>Name : <?php echo $accepted_list[$i][7] ?></li>
+                <li>Location : <?php echo $accepted_list[$i][9] ?></li>
+                <li>Phone : <?php echo $accepted_list[$i][10] ?></li>
+              </ol>
+              </p>
+              <div style="display:flex; flex-direction:row;">
+                <p style="font-size:14px; color:brown" class="text-muted">Please contact with the person to start the work!</p>
+                <b style="font-size:14px;margin-left:auto"> Finished this work? <a
+                    href="finishing.php?pid=<?php echo $accepted_list[$i][2] ?>">Ask for a review</a></b>
+              </div>
+            </div>
+
+            <!-- your work request got rejected -->
+        <?php } else if ($accepted_list[$i][5] == 3) { ?>
+              <div style="display:flex; flex-direction:column; margin-left: 15px">
+                <img class="img-thumbnail" height="70px" width="70px" src="<?php echo $accepted_list[$i][8] ?>">
+                <p style="font-size:14px; margin-top:-25px"><a href="profile.php?user=<?php echo $accepted_list[$i][6] ?>">
+                    <h2><?php echo $accepted_list[$i][7] ?></h2>
+                  </a>
+                  has rejected your work request that you applied to.Here's <a
+                    href="show_post.php?pid=<?php echo $accepted_list[$i][2] ?>">the post</a></p>
+              </div>
+        <?php } else if($accepted_list[$i][5]==5) {
+          $sql = "select review from postWork where postID= '{$accepted_list[$i][2]}'";
+          $res=mysqli_query($conn,$sql);
+          $r = mysqli_fetch_assoc($res);
+          if(mysqli_num_rows($res)>0) { ?>
+            <div style="display:flex; flex-direction:column; margin-left: 15px">
+                <img class="img-thumbnail" height="70px" width="70px" src="<?php echo $accepted_list[$i][8] ?>">
+                <p style="font-size:14px; margin-top:-25px"><a href="profile.php?user=<?php echo $accepted_list[$i][6] ?>">
+                    <h2><?php echo $accepted_list[$i][7] ?></h2>
+                  </a>
+                  has reviewed your work with <?php echo $r['review'] ?> star rating to <a
+                    href="show_post.php?pid=<?php echo $accepted_list[$i][2] ?>">this service</a></p>
+              </div>
+          <?php } mysqli_close($conn);?>
+          
+        <?php } ?>  
       <?php } ?>
-<?php } ?>
-    
+
+      <div class="break"></div>
+      </li>
+    <?php } ?>
+    </ul>
+  </div>
+  </div>
+  </div>
+
+  
+
 </body>
+
 </html>
+</body>
 
-<script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.0/dist/umd/popper.min.js" integrity="sha384-Q6E9RHvbIyZFJoft+2mJbHaEWldlvI9IOYy5n3zV9zzTtmI3UksdQRVvoxMfooAo" crossorigin="anonymous"></script>
-<script src="https://stackpath.bootstrapcdn.com/bootstrap/5.0.0-alpha1/js/bootstrap.min.js" integrity="sha384-oesi62hOLfzrys4LxRF63OJCXdXDipiYWBnvTl9Y9/TRlw5xlKIEHpNyvvDShgf/" crossorigin="anonymous"></script>
-<script src="https://unpkg.com/feather-icons"></script>
-<script src="https://unpkg.com/swiper/swiper-bundle.min.js"></script>
-<script>
-    feather.replace();
-
-    var mySwiper = new Swiper('.swiper-container', {
-      // Optional parameters
-      slidesPerView: 'auto',
-      spaceBetween: 24,
-    });
-</script>
+</html>
