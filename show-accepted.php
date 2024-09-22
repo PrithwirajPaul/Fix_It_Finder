@@ -23,7 +23,7 @@ if ($hereToDecline) {
 
 mysqli_close($conn);
 if(isset($_GET['cuser'])){
-    header('location:profile.php?user='.$_GET['cuser']);
+    header('location:profile.php?user='.$_GET['user']);
 }else{
     header("location:home.php");
 }
