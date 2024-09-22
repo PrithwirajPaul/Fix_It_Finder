@@ -367,7 +367,7 @@ $provided = mysqli_num_rows(mysqli_query($conn, $providedSql));
                         </button>
                       <?php } else { ?>
                         <button class="btn success" id="btn"><a class="dropdown-item"
-                            href="<?php echo $destination . "&cuser=" . $current_user ?>" title="<?php echo $text ?>"
+                            href="<?php echo $destination?>" title="<?php echo $text ?>"
                             style="color: <?php echo $col ?>; text-decoration: none;"><?php echo $button_text ?></a></button>
                         </button>
                       <?php } ?>
