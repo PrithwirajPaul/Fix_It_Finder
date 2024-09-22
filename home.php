@@ -422,14 +422,6 @@ $provided = mysqli_num_rows(mysqli_query($conn, $providedSql));
     <script src="https://unpkg.com/feather-icons"></script>
     <script src="https://unpkg.com/swiper/swiper-bundle.min.js"></script>
     <script>
-      feather.replace();
-
-      var mySwiper = new Swiper('.swiper-container', {
-        // Optional parameters
-        slidesPerView: 'auto',
-        spaceBetween: 24,
-      });
-
       function toggleSaveButton(post_id, action) {
         var xhr = new XMLHttpRequest();
         xhr.open("POST", "interact.php", true);
