@@ -9,31 +9,15 @@ $result = $conn->query($sql);
 $accepted_list = array();
 if (mysqli_num_rows($result) > 0) {
   while ($row = mysqli_fetch_assoc($result)) {
-    // echo '<pre>';
-    // print_r($row);
-    // echo '</pre>';
     $provider_query = "SELECT username, img FROM info_table WHERE userid='{$row['provider']}'";
     $user_result = mysqli_query($conn, $provider_query);
     $provider = mysqli_fetch_assoc($user_result);
     $customer_query = "SELECT username, img,adrs,phone FROM info_table WHERE userid='{$row['customer']}'";
     $user_result = mysqli_query($conn, $customer_query);
     $customer = mysqli_fetch_assoc($user_result);
-    // echo '<pre>';
-    // print_r($user);
-    // echo '</pre>';
-
     array_push($accepted_list, array($provider['username'], $row['post_title'], $row['post_id'], $provider['img'], $row['provider'], $row['postStatus'], $row['customer'], $customer['username'], $customer['img'], $customer['adrs'], $customer['phone']));
   }
 }
-// $sql = "SELECT * FROM connected_pairs";
-// $result = $conn->query($sql);
-// $connectedList=array();
-// if(mysqli_num_rows($result) > 0){ 
-//     while($row = mysqli_fetch_assoc($result)){
-//       array_push($connectedList,array($row['professional'],$row['average_joe']));
-//       }
-//     } 
-
 ?>
 <!DOCTYPE html>
 <html lang="en">
@@ -42,14 +26,8 @@ if (mysqli_num_rows($result) > 0) {
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Document</title>
-
-  <!-- Latest compiled and minified CSS -->
   <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.2.0/css/bootstrap.min.css">
-
-  <!-- Optional theme -->
   <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.2.0/css/bootstrap-theme.min.css">
-
-  <!-- Latest compiled and minified JavaScript -->
   <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.2.0/js/bootstrap.min.js"></script>
 </head>
 
